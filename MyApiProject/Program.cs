@@ -26,6 +26,14 @@ app.MapGet("/api/encrypt", (string plaintext) =>
     return Results.Ok(encryptedText);
 });
 
+app.MapGet("/api/decrypt", (string encryptedText) =>
+{
+    int shift = 3; // Byter till 3 bokstäver längre fram i alfabetet
+    string decryptedText = CaesarCipherDecrypt(encryptedText, shift); //skickas in som minus för att ta bak 3 bokstäver
+    Console.WriteLine($"Encrypted: {encryptedText}, Decrypted: {decryptedText}");
+    return Results.Ok(decryptedText);
+});
+
 app.Run();
 
 // Caesar cipher, man byter x antal bokstäver fram eller bak i alfabetet
@@ -40,7 +48,7 @@ string CaesarCipherEncrypt(string input, int shift)
             if (char.IsUpper(ch))
             {
                 if (shiftedChar > 'Z')
-                    shiftedChar = (char)(shiftedChar - 26); 
+                    shiftedChar = (char)(shiftedChar - 26);
             }
             else
             {
@@ -55,4 +63,9 @@ string CaesarCipherEncrypt(string input, int shift)
         }
     }
     return result;
+}
+
+string CaesarCipherDecrypt(string input, int shift)
+{
+    return CaesarCipherEncrypt(input, -shift);
 }
